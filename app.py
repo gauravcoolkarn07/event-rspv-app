@@ -52,12 +52,15 @@ def index():
 def create_event():
     if request.method == 'POST':
         name = request.form['name']
-        date = request.form['date']
-        max_seats = request.form['max_seats']
+date = request.form['date']
+max_seats = request.form['max_seats']
+admin_password = request.form['admin_password']
 
-        conn = sqlite3.connect('events.db')
-        conn.execute("INSERT INTO events (name, date, max_seats) VALUES (?, ?, ?)",
-                     (name, date, max_seats))
+conn = sqlite3.connect('events.db')
+conn.execute("""
+    INSERT INTO events (name, date, max_seats, admin_password)
+    VALUES (?, ?, ?, ?)
+""", (name, date, max_seats, admin_password))
         conn.commit()
         conn.close()
         return redirect('/')
@@ -75,6 +78,29 @@ def rsvp(event_id):
     conn.close()
 
     return redirect('/')
+@app.route("/admin/<int:event_id>", methods=["GET", "POST"])
+def admin_dashboard(event_id):
+    conn = sqlite3.connect("events.db")
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+        password = request.form["password"]
+
+        cursor.execute("SELECT admin_password FROM events WHERE id = ?", (event_id,))
+        event = cursor.fetchone()
+
+        if event and event["admin_password"] == password:
+            cursor.execute("SELECT * FROM attendees WHERE event_id = ?", (event_id,))
+            attendees = cursor.fetchall()
+            return render_template("admin.html", attendees=attendees)
+
+        else:
+            return "Wrong Password"
+
+    return render_template("admin_login.html", event_id=event_id)
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",5000))
     app.run(host="0.0.0.0",port=port)
