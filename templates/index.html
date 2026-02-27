@@ -40,11 +40,11 @@
 
     {% for event in events %}
     <div class="card shadow-sm mb-3 p-3">
-        <h5 class="text-primary">{{ event[1] }}</h5>
-        <p>Date: {{ event[2] }}</p>
-        <p>Seats: {{ event[3] }}</p>
+    <h5 class="text-primary">{{ event.name }}</h5>
+<p>Date: {{ event.date }}</p>
+<p>Seats: {{ event.max_seats }}</p>
 
-        <form method="POST" action="/rsvp/{{ event[0] }}">
+<form method="POST" action="/rsvp/{{ event.id }}">
 
             <div class="row g-2">
                 <div class="col-md-4">
