@@ -45,6 +45,7 @@
         <p>Seats: {{ event[3] }}</p>
 
         <form method="POST" action="/rsvp/{{ event[0] }}">
+
             <div class="row g-2">
                 <div class="col-md-4">
                     <input type="text" name="user_name" class="form-control" placeholder="Your Name" required>
