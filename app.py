@@ -4,18 +4,27 @@ import sqlite3
 app = Flask(__name__)
 
 def init_db():
-    conn = sqlite3.connect('events.db')
-    conn.execute('''CREATE TABLE IF NOT EXISTS events (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT,
-                    date TEXT,
-                    max_seats INTEGER)''')
+    conn = sqlite3.connect("events.db")
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            date TEXT,
+            max_seats INTEGER,
+            admin_password TEXT
+        )
+    """)
 
-    conn.execute('''CREATE TABLE IF NOT EXISTS rsvps (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    event_id INTEGER,
-                    user_name TEXT,
-                    email TEXT)''')
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS rsvps (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            event_id INTEGER,
+            user_name TEXT,
+            email TEXT
+        )
+    """)
+
+    conn.commit()
     conn.close()
 
 init_db()
