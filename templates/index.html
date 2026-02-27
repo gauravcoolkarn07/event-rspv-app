@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event RSVP System</title>
+</head>
+<body>
+    <h1>All Events</h1>
+    <a href="/create">Create Event</a>
+
+    {% for event in events %}
+    <h2>{{ event.name }}</h2>
+    <p>Date: {{ event.date }}</p>
+    <p>Seats: {{ event.rsvp_count }} / {{ event.max_seats }}</p>
+
+    <form action="/rsvp/{{ event.id }}" method="POST">
+        <input type="text" name="user_name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <button type="submit">RSVP</button>
+    </form>
+
+    <h4>Registered:</h4>
+    <ul>
+        {% for person in event.attendees %}
+            <li>{{ person[0] }}</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+{% endfor %}
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Event</title>
+</head>
